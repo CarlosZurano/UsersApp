@@ -1,7 +1,8 @@
+import { useReducer } from "react";
 import { UserForm } from "./components/UserForm";
 import { UsersList } from "./components/UsersList";
+import { usersReducer } from "./reducers/usersReducer";
 
-export const UsersApp = () => {
   const initialUsers = [
     {
       id: 1,
@@ -11,19 +12,42 @@ export const UsersApp = () => {
     },
   ];
 
-  return (
-    <>
-      <div className="container my-4">
-        <div className="row">
-          <div className="col">
-            <UserForm />
-          </div>
+export const UsersApp = () => {
+    const [users, dispatch] = useReducer(usersReducer, initialUsers);
 
-          <div className="col">
-            <UsersList users = {initialUsers}/>
-          </div>
+    const handlerAddUser = (userFormData) => { //viene del formulario
+        dispatch({
+            type: 'addUser',
+            payload: userFormData,
+            // userFormData representa el objeto con los 
+            // datos que envia el formulario
+        })
+    }
+
+    const handlerRemoveUser = (id) => {
+        dispatch({
+            type: 'removeUser',
+            payload: id,
+        })
+    }
+
+    return (
+        <>
+        <div className="container my-4">
+            <div className="row">
+            <div className="col">
+                <UserForm  
+                    handlerAddUser={ handlerAddUser } />
+            </div>
+
+            <div className="col">
+                <UsersList
+                    handlerRemoveUser={ handlerRemoveUser }
+                    users = {users}
+                />
+            </div>
+            </div>
         </div>
-      </div>
-    </>
-  );
+        </>
+    );
 };
