@@ -14,6 +14,16 @@ export const usersReducer = (state = [], action) => {
             return state.filter(user => user.id !== action.payload);
     // el payload es el id. Elimina usuarios cuyo id no es igual al id 
     // que queremos eliminar
+        
+        case 'updateUser':
+            return state.map( u => {
+                if(u.id === action.payload.id){
+                    return {
+                        ...action.payload
+                    };
+                }
+                return u
+            })
         default:
             return state;
     }

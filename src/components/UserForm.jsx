@@ -1,23 +1,24 @@
 import Swal from "sweetalert2";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const initialUserForm = {
-  username: "",
-  password: "",
-  email: "",
-};
-
-export const UserForm = ({ handlerAddUser }) => {
+export const UserForm = ({ userSelected, handlerAddUser, initialUserForm }) => {
   // Estado inicial del formulario, basado en initialUserForm
   const [userForm, setUserForm] = useState(initialUserForm);
 
   //Desestructuración para acceder fácilmente a cada campo del formulario
-  const { username, password, email } = userForm;
+  const { id, username, password, email } = userForm;
+
+
+  useEffect(() => {
+    setUserForm({
+      ...userSelected,
+      password: '',
+    });
+  }, [userSelected])
 
   // Maneja los cambios en los inputs del formulario
   const onInputChange = ({ target }) => {
   const { name, value } = target; // Extrae el nombre del campo y su nuevo valor
-
     // Actualiza el estado del formulario, manteniendo el resto de los valores
     setUserForm({
       ...userForm,
@@ -40,10 +41,11 @@ export const UserForm = ({ handlerAddUser }) => {
     if (missingFields.length > 0) {
       Swal.fire(
         "Campos requeridos",
-        `Por favor, completa los siguientes campos: ${missingFields.join(", ")}`, // el join introduce una ',' entre los elementos + un espacio
+        `Por favor, completa los siguientes campos: 
+          ${missingFields.join(", ")}`, // el join introduce una ',' entre los elementos + un espacio
         "error"
       );
-      return; // Salir si faltan campos
+      return; 
     }
     handlerAddUser(userForm); // se envia al padre 
                               // (userFormData en UsersApp)
@@ -76,6 +78,7 @@ export const UserForm = ({ handlerAddUser }) => {
         onChange={onInputChange}
       />
 
+
       <input
         className="form-control my-3 w-75"
         placeholder="e-mail"
@@ -83,8 +86,13 @@ export const UserForm = ({ handlerAddUser }) => {
         value={email}
         onChange={onInputChange}
       />
+      <input 
+        type="hidden" 
+        name="id"
+        value={id}/>
+
       <button className="btn btn-primary" type="submit">
-        Crear
+        {id > 0 ? 'Editar' : 'Crear'}
       </button>
     </form>
   );
