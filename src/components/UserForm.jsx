@@ -1,4 +1,3 @@
-import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 
 export const UserForm = ({ userSelected, handlerAddUser, initialUserForm }) => {
@@ -50,12 +49,6 @@ export const UserForm = ({ userSelected, handlerAddUser, initialUserForm }) => {
     handlerAddUser(userForm); // se envia al padre 
                               // (userFormData en UsersApp)
                               // y aniade el usuario
-    
-    Swal.fire(
-      "Uusario añadido",
-      `El usuario ${username}, fue creado correctamente`,
-      "success"
-    )
 
     setUserForm(initialUserForm);// reset formulario
   };
