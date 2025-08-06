@@ -12,8 +12,9 @@ export const usersReducer = (state = [], action) => {
 
         case 'removeUser':
             return state.filter(user => user.id !== action.payload);
-    // el payload es el id. Elimina usuarios cuyo id no es igual al id 
-    // que queremos eliminar
+            // El payload es el ID del usuario que queremos eliminar.
+            // Usamos .filter para crear un nuevo array excluyendo al usuario con ese ID.
+            // Esto mantiene la inmutabilidad: no modificamos el array original, devolvemos uno nuevo.
         
         case 'updateUser':
             return state.map( u => {

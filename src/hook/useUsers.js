@@ -21,16 +21,12 @@ const initialUserForm = {
 export const useUsers = () => {
   const [users, dispatch] = useReducer(usersReducer, initialUsers);
   const [userSelected, setuUserSelected] = useState(initialUserForm); // usuario seleccionado
+  const [visibleForm, setVisibleForm] = useState(false);  //estado visibilidad formulario
+  
   const handlerAddUser = (userFormData) => {
     // viene del formulario
-    let type;
-    if (userFormData.id === 0) {
-      type = "addUser";
-    } else {
-      type = "updateUser";
-    }
     dispatch({
-      type,
+      type: (userFormData.id === 0) ? "addUser" : "updateUser",
       payload: userFormData,
       // userFormData representa el objeto con los
       // datos que envia el formulario
@@ -47,7 +43,9 @@ export const useUsers = () => {
             `El usuario ${userFormData.username} ha sido actualizado con éxito`,
             "success"
 
-    )
+    );
+    setVisibleForm(false);
+    setuUserSelected(initialUserForm);
   };
 
   const handlerRemoveUser = (id) => {
@@ -59,15 +57,32 @@ export const useUsers = () => {
 
   const handlerUserSelectedForm = (user) => {
     setuUserSelected({ ...user });
+    // true porque al seleccionar, tengo que mostrar el form
+    setVisibleForm(true); 
   };
+
+
+  const handlerOpemForm = () => {
+    setVisibleForm(true);
+  }
+
+  const handlerCloseForm = () => {
+    setVisibleForm(false);
+    setuUserSelected(initialUserForm);
+  }
+
 
   // devuelve un objeto con las funciones  estados del prop
   return {
     users,
     userSelected,
     initialUserForm,
+    visibleForm,
+
     handlerAddUser,
     handlerRemoveUser,
     handlerUserSelectedForm,
+    handlerOpemForm,
+    handlerCloseForm,
   };
 };

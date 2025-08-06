@@ -1,23 +1,27 @@
 import { useEffect, useState } from "react";
 
-export const UserForm = ({ userSelected, handlerAddUser, initialUserForm }) => {
+export const UserForm = ({
+  handlerCloseForm,
+  userSelected,
+  handlerAddUser,
+  initialUserForm,
+}) => {
   // Estado inicial del formulario, basado en initialUserForm
   const [userForm, setUserForm] = useState(initialUserForm);
 
   //Desestructuración para acceder fácilmente a cada campo del formulario
   const { id, username, password, email } = userForm;
 
-
   useEffect(() => {
     setUserForm({
       ...userSelected,
-      password: '',
+      password: "",
     });
-  }, [userSelected])
+  }, [userSelected]);
 
   // Maneja los cambios en los inputs del formulario
   const onInputChange = ({ target }) => {
-  const { name, value } = target; // Extrae el nombre del campo y su nuevo valor
+    const { name, value } = target; // Extrae el nombre del campo y su nuevo valor
     // Actualiza el estado del formulario, manteniendo el resto de los valores
     setUserForm({
       ...userForm,
@@ -32,7 +36,7 @@ export const UserForm = ({ userSelected, handlerAddUser, initialUserForm }) => {
     const missingFields = [];
 
     // Si vacio, le pusheo los campos
-    if (!username) missingFields.push("Nombre"); 
+    if (!username) missingFields.push("Nombre");
     if (!password) missingFields.push("Contraseña");
     if (!email) missingFields.push("Email");
 
@@ -44,14 +48,20 @@ export const UserForm = ({ userSelected, handlerAddUser, initialUserForm }) => {
           ${missingFields.join(", ")}`, // el join introduce una ',' entre los elementos + un espacio
         "error"
       );
-      return; 
+      return;
     }
-    handlerAddUser(userForm); // se envia al padre 
-                              // (userFormData en UsersApp)
-                              // y aniade el usuario
+    handlerAddUser(userForm); // se envia al padre
+    // (userFormData en UsersApp)
+    // y aniade el usuario
 
-    setUserForm(initialUserForm);// reset formulario
+    setUserForm(initialUserForm); // reset formulario
   };
+
+  const onCloseForm = () => {
+    handlerCloseForm();
+    setUserForm(initialUserForm);
+  };
+
   return (
     <form onSubmit={onSubmit}>
       <input
@@ -71,7 +81,6 @@ export const UserForm = ({ userSelected, handlerAddUser, initialUserForm }) => {
         onChange={onInputChange}
       />
 
-
       <input
         className="form-control my-3 w-75"
         placeholder="e-mail"
@@ -79,13 +88,17 @@ export const UserForm = ({ userSelected, handlerAddUser, initialUserForm }) => {
         value={email}
         onChange={onInputChange}
       />
-      <input 
-        type="hidden" 
-        name="id"
-        value={id}/>
+      <input type="hidden" name="id" value={id} />
 
       <button className="btn btn-primary" type="submit">
-        {id > 0 ? 'Editar' : 'Crear'}
+        {id > 0 ? "Editar" : "Crear"}
+      </button>
+      <button
+        className="btn btn-primary ms-2"
+        type="button"
+        onClick={onCloseForm}
+      >
+        Cerrar
       </button>
     </form>
   );
