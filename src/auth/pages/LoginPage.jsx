@@ -1,9 +1,10 @@
 import { useState } from "react";
+import Swal from "sweetalert2";
 const initialLoginForm = {
     username: '',
     password: '',
 }
-export const LoginPage = () => {
+export const LoginPage = ({ handlerLogin }) => {
 
     const [loginForm, setLoginForm] = useState(initialLoginForm);
     const {username, password} = loginForm;
@@ -15,6 +16,30 @@ export const LoginPage = () => {
             [name]: value,
         })
     }
+
+    const onSubmit = (event) => {
+      event.preventDefault();
+
+      const missingFields = [];
+
+      // Si vacio, le pusheo los campos
+      if (!username) missingFields.push("Nombre");
+      if (!password) missingFields.push("Contraseña");
+
+      if (missingFields.length > 0){
+        Swal.fire(
+          'Campos requeridos',
+          `Por favor, complete los siguientes campos: 
+            ${missingFields.join(", ")} `,
+          'error'
+        )
+      }
+
+      //implementamos el login, en este caso simulado
+      handlerLogin({username, password})
+      setLoginForm(initialLoginForm);
+    }
+
     return (
     <div className="modal" style={{display: "block"}}tabIndex="-1" role="dialog">
       <div className="modal-dialog" role="document">
@@ -23,7 +48,7 @@ export const LoginPage = () => {
             <h5 className="modal-title"> Login Page</h5>
           </div>
 
-          <form>
+          <form onSubmit={ onSubmit }>
             <div className="modal-body">
                 <input 
                     type="text" 
