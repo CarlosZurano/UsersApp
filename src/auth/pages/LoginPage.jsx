@@ -40,6 +40,8 @@ export const LoginPage = ({ handlerLogin }) => {
       setLoginForm(initialLoginForm);
     }
 
+  
+
     return (
     <div className="modal" style={{display: "block"}}tabIndex="-1" role="dialog">
       <div className="modal-dialog" role="document">
