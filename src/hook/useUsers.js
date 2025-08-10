@@ -1,6 +1,7 @@
 import { useReducer, useState } from "react";
 import { usersReducer } from "../reducers/usersReducer";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const initialUsers = [
   {
@@ -23,6 +24,9 @@ export const useUsers = () => {
   const [userSelected, setuUserSelected] = useState(initialUserForm); // usuario seleccionado
   const [visibleForm, setVisibleForm] = useState(false);  //estado visibilidad formulario
   
+  // para las rutas
+  const navigate = (useNavigate);
+
   const handlerAddUser = (userFormData) => {
     // viene del formulario
     dispatch({
@@ -71,6 +75,7 @@ export const useUsers = () => {
     setuUserSelected(initialUserForm);
   }
 
+  navigate('/users');
 
   // devuelve un objeto con las funciones  estados del prop
   return {
