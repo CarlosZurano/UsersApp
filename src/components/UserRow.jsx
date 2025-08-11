@@ -1,52 +1,40 @@
-import Swal from "sweetalert2";
+import { useContext } from "react"
+import { NavLink } from "react-router-dom"
+import { UserContext } from "../context/UserContext"
 
-export const UserRow = ({ handlerUserSelectedForm ,id, username, email, handlerRemoveUser }) => {
-    
-  const onRemoveUser = (id) => {
-    Swal.fire({
-      title: "¿Estás seguro?",
-      text: "¡No podrás revertir esto!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Sí, eliminar",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        handlerRemoveUser(id);
-        Swal.fire("Eliminado", "El usuario ha sido eliminado.", "success");
-      }
-    });
-  };
-
-  
-  return (
-    <>
-      <tr>
-        <td>{id}</td>
-        <td>{username}</td>
-        <td>{email}</td>
-        <td>
-          <button 
-            type="buttom" 
-            className="btn btn-secondary btn-sm"
-            onClick={() => handlerUserSelectedForm({
-              id,
-              username,
-              email,
-            })}>
-            update
-          </button>
-        </td>
-
-        <td>
-          <button 
-            type="button" 
-            className="btn btn-danger btn-sm"
-            onClick={()=> onRemoveUser(id)}>
-            remove
-          </button>
-        </td>
-      </tr>
-    </>
-  );
-};
+export const UserRow = ({ id, username, email }) => {
+    const {handlerUserSelectedForm, handlerRemoveUser } = useContext(UserContext);
+    return (
+        <tr>
+            <td>{id}</td>
+            <td>{username}</td>
+            <td>{email}</td>
+            <td>
+                <button
+                    type="button"
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => handlerUserSelectedForm({
+                        id,
+                        username,
+                        email
+                    })}>
+                    update
+                </button>
+            </td>
+            <td>
+                <NavLink className={'btn btn-secondary btn-sm'}
+                    to={'/users/edit/' + id} >
+                    update route
+                </NavLink>
+            </td>
+            <td>
+                <button
+                    type="button"
+                    className="btn btn-danger btn-sm"
+                    onClick={() => handlerRemoveUser(id)}>
+                    remove
+                </button>
+            </td>
+        </tr>
+    )
+}

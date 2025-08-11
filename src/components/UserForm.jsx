@@ -1,12 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import { UserContext } from "../context/UserContext";
 
-export const UserForm = ({
-  handlerCloseForm,
-  userSelected,
-  handlerAddUser,
-  initialUserForm,
-}) => {
+export const UserForm = ({ handlerCloseForm, userSelected}) => {
+  const { initialUserForm, handlerAddUser } = useContext(UserContext);
+
   // Estado inicial del formulario, basado en initialUserForm
   const [userForm, setUserForm] = useState(initialUserForm);
 
@@ -39,7 +37,16 @@ export const UserForm = ({
     // Si vacio, le pusheo los campos
     if (!username) missingFields.push("Nombre");
     if (!password) missingFields.push("Contraseña");
-    if (!email) missingFields.push("Email");
+    if (!email) {
+      missingFields.push("Email");
+    } else if (!email.includes("@")) {
+        Swal.fire(
+        "Error de validacion de email",
+        "El email debe ser valido, incluir un @",
+        "error"
+      );
+      return;
+    }
 
     // Si el array tiene algun elemento = algo hay vacio
     if (missingFields.length > 0) {
@@ -51,6 +58,7 @@ export const UserForm = ({
       );
       return;
     }
+
     handlerAddUser(userForm); // se envia al padre
     // (userFormData en UsersApp)
     // y aniade el usuario
@@ -94,13 +102,16 @@ export const UserForm = ({
       <button className="btn btn-primary" type="submit">
         {id > 0 ? "Editar" : "Crear"}
       </button>
-      <button
-        className="btn btn-primary ms-2"
-        type="button"
-        onClick={onCloseForm}
-      >
-        Cerrar
-      </button>
+
+      {!handlerCloseForm || (
+        <button
+          className="btn btn-primary ms-2"
+          type="button"
+          onClick={onCloseForm}
+        >
+          Cerrar
+        </button>
+      )}
     </form>
   );
 };
