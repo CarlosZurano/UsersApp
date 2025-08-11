@@ -50,6 +50,8 @@ export const useUsers = () => {
     );
     setVisibleForm(false);
     setuUserSelected(initialUserForm);
+
+    
   };
 
   const handlerRemoveUser = (id) => {
